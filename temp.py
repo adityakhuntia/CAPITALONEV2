@@ -22,5 +22,5 @@ def get_media_type(media_url):
         return ""
 
 
-url = "https://api.twilio.com/2010-04-01/Accounts/TWILIO_ACCOUNT_SID_REMOVED/Messages/MMb6b5e5592c1243ca9685a28eb07ac897/Media/ME53c8ec3f2fbb19027f03f3292feae79f"
-print("Media type:", get_media_type(url))
+#url = "https://api.twilio.com/2010-04-01/Accounts/TWILIO_ACCOUNT_SID_REMOVED/Messages/MMb6b5e5592c1243ca9685a28eb07ac897/Media/ME53c8ec3f2fbb19027f03f3292feae79f"
+#print("Media type:", get_media_type(url))

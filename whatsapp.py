@@ -1,20 +1,18 @@
 from twilio.rest import Client
 import json
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+TWILIO_SID = os.getenv("TWILIO_SID")
+TWILIO_AUTH = os.getenv("TWILIO_AUTH")
+
+
 def send_whatsapp_message(query_text: str, response_text: str, recipient_number: str) -> str:
-    """
-    Sends a WhatsApp message using Twilio's Content API template.
-
-    Args:
-        query_text (str): The incoming query text (to fill template variable {{1}})
-        response_text (str): The response/advice text (to fill template variable {{2}})
-        recipient_number (str): Recipient's WhatsApp number in format '+91XXXXXXXXXX'
-
-    Returns:
-        str: The SID of the sent message
-    """
-    account_sid = "TWILIO_ACCOUNT_SID_REMOVED"
-    auth_token = "c45bbb4dac14fd3fab6be849920322ce"
+   
+    account_sid = TWILIO_SID
+    auth_token = TWILIO_AUTH
 
     client = Client(account_sid, auth_token)
 
@@ -38,3 +36,7 @@ def send_whatsapp_message(query_text: str, response_text: str, recipient_number:
 #    recipient = "+919818851259"
 #    sid = send_whatsapp_message(query, response, recipient)
 #    print("Message SID:", sid)
+
+
+
+   

@@ -5,16 +5,18 @@ from dotenv import load_dotenv
 from audio_flow import pipeline
 from sarvam_stt_cloud import speech_to_text_translate
 from whatsapp import send_whatsapp_message
-
-
+from intent_classify import classify_intent
+from weatherbit import weatherdet
 load_dotenv()
 # from audio_flow import process_audio
 # from rag_flow import process_rag
 
 BASE_URL = "https://flask-whatsapp-webhook.onrender.com"
 
-ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+ACCOUNT_SID = os.getenv("TWILIO_SID")
+AUTH_TOKEN = os.getenv("TWILIO_AUTH")
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 
 
 import subprocess, os
@@ -32,10 +34,9 @@ def download_audio(media_url, save_path="audio.ogg"):
     if not ACCOUNT_SID or not AUTH_TOKEN:
         raise ValueError("Twilio credentials not found in environment variables")
     
-    # follow redirects explicitly
     resp = requests.get(
         media_url,
-        auth=(ACCOUNT_SID, AUTH_TOKEN),
+        auth=(ACCOUNT_SID, AUTH_TOKEN),  # Basic Auth
         timeout=15,
         allow_redirects=True
     )
@@ -47,7 +48,6 @@ def download_audio(media_url, save_path="audio.ogg"):
     return save_path
 
 
-
 def get_media_type(media_url):
     try:
         resp = requests.get(
@@ -55,7 +55,7 @@ def get_media_type(media_url):
             auth=(ACCOUNT_SID, AUTH_TOKEN),
             timeout=10,
             allow_redirects=True,
-            stream=True  # don’t download the whole file
+            stream=True  # only headers
         )
         resp.raise_for_status()
         return resp.headers.get("Content-Type", "")
@@ -101,7 +101,24 @@ def scheduler():
                             try:
                                 wav_file = convert_to_wav(local_file)
                                 result = speech_to_text_translate(wav_file)
-                                print(result)
+                                intent = classify_intent(user_input = result['transcript'])
+                                weather_data = ""
+                                market_data = ""
+                                if (intent=="weather_query"):
+                                    weather_data = weatherdet(location="WestBengal")
+                                elif(intent == "market_price"):
+                                    market_data = get_live_price(state_name="WestBengal")
+                                else:
+                                    continue
+
+                                prompt_for_rag = f"{result['transcript']} \n {weather_data} \n {market_data}" 
+
+                                print(prompt_for_rag)
+                                
+
+                                
+
+
 
                                 
                                 #OFFLINE VERSION
@@ -120,7 +137,7 @@ def scheduler():
                                 query = result['transcript']
                                 recipient = from_number
                                 response = "ANIK RAG BANA DE"
-                                recipient = "+918287724256"
+                                recipient = "+918287724256" ##CHANGE RECIEPEITN
                                 sid = send_whatsapp_message(query, response, recipient)
                                 print("Message SID:", sid)
 
@@ -145,9 +162,9 @@ def scheduler():
 
                 # ✅ Mark as seen
                 seen_url = f"{BASE_URL}/messages/{msg['id']}/seen"
-                r = requests.post(seen_url)
-                if r.status_code == 200:
-                    print(f"Marked message {msg['id']} as seen")
+                #r = requests.post(seen_url)
+                #if r.status_code == 200:
+                #    print(f"Marked message {msg['id']} as seen")
 
         except Exception as e:
             print("Error in scheduler:", e)
