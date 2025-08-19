@@ -1,34 +1,74 @@
-This includes the code for 
-1. ASR Flow
-2. WhatsApp Flow
-3. ENAM Agent 
-4. WeatherBit Agent
+# CAPITALONEV2
 
-Instructions To Run (In case the render fails due to free tier access) :
-  Install whisper.cpp
-  Run the audio file in audio_flow.py 
+CAPITALONEV2 is a versatile AI-driven project developed by Aditya Khuntia & Anik Dey (Delhi Technological University) featuring:
 
-  otherwise,for online mode, run it on sarvam stt cloud followed by the RAG Module.
+- **ASR (Automatic Speech Recognition) Flow**
+- **WhatsApp Integration Flow**
+- **ENAM Agent**
+- **WeatherBit Agent**
+- Integrated with RAG (Retrieval-Augmented Generation)
+- Local and cloud-based speech processing options
+
+---
+
+##  Project Contents
+
+The repository includes the following components:
+
+- **ASR and Audio Processing**
+  - `audio_flow.py` – Offline audio processing pipeline
+  - `faster_whisper_stt.py`, `whisper_stt.py`, `whisper.cpp` – Whisper-based speech recognition
+  - `sarvam_stt_cloud.py`, `sarvam_cloud.py` – Cloud-based speech-to-text options
+
+- **Intent & Translation Agents**
+  - `intent_classify.py`
+  - `enam.py`
+  - `sarvam_translate.py`, `sarvam_translate2.py`
+
+- **WhatsApp Flow**
+  - `FlaskWhatsAppServer` (Flask endpoint)
+  - `whatsapp.py`
+
+- **RAG Integration**
+  - `RAG.py`
+
+- **Others**
+  - `scheduler.py` – Task scheduling
+  - `weatherbit.py` – WeatherBit integration
+  - `temp.py` – Miscellaneous/testing scripts
+  - `audio.mp3`, `bfg.jar` – Auxiliary files and utilities
+  - `docs/` – Optional documentation
+
+---
+
+##  Prerequisites
+
+- Python **3.8+**
+- Optional: **whisper.cpp** (for offline audio processing)
+- Access to cloud STT services (for online mode)
+- Internet access for RAG and WhatsApp flows
+
+---
+
+##  Setup & Installation
+
+Clone the repository and enter its directory:
+```bash
+git clone https://github.com/adityakhuntia/CAPITALONEV2.git
+cd CAPITALONEV2
+
+Create and activate a virtual environment:
+
+python -m venv venv
+source venv/bin/activate    # Linux/macOS
+# or
+.\venv\Scripts\activate     # Windows
+
+Install dependencies:
+
+pip install --upgrade pip
+pip install -r requirements.txt
 
 
-Thanks a Lot :)
-
-Aditya Khuntia & Anik Dey
-Delhi Technologcial University
-
-
-GDrive: https://drive.google.com/drive/folders/1cS-6xPFMABHWipsQ0dp8KmNAsisgfD8K?usp=sharing 
-
-Pitch Link: https://youtu.be/o8fI0HezciM
-
-
-Auths If required (All Free Tier)
-
-
-
-
-
-
-
-
-
+## Running the Project:
+Just run scheduler.py 
