@@ -16,7 +16,7 @@ def timed(func):
 
 
 @timed
-def step1_transcribe(audio_path: str, lang: str = "hi") -> str:
+def step1_transcribe(audio_path: str, lang: str = "bn") -> str:
     print("Step 1: Transcribing Audio...")
     return transcribe_with_whisper(audio_path, lang=lang)
 
@@ -44,10 +44,15 @@ def pipeline(audio_path: str):
     intent = step3_classify_intent(translated_text)
 
     print("Final Output:")
-    print(f"Original (HI): {transcription}")
+    print(f"Original: {transcription}")
     print(f"Translated (EN): {translated_text}")
     print(f"Predicted Intent: {intent}")
 
+    return {"Orignal":transcription, "Translation": translate_text, "Intent":intent}
+
 
 if __name__ == "__main__":
+    start_time = time.perf_counter()
     pipeline("audio.mp3")
+    total_time = time.perf_counter() - start_time
+    print(f"\n🕒 Total wall-clock time: {total_time:.2f} seconds")
